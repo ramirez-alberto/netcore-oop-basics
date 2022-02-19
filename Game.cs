@@ -4,8 +4,13 @@ namespace netcore_oop_basics
 {
     class Game
     {
-
-        private static void DisplayBoard(string gridFiller)
+        public bool QuitGame { get; set; }
+        public Game()
+        {
+            QuitGame = false;
+            DisplayBoard(" ");
+        }
+        private void DisplayBoard(string gridFiller)
         {
             //Console.Clear();
             for (int i = 0; i < 3; i++)
@@ -15,12 +20,20 @@ namespace netcore_oop_basics
                 Console.WriteLine($"{(i < 2 ? "***********" : "")}");
             }
         }
-        static void Main(string[] args)
+
+        public void HandleUserInput(ConsoleKeyInfo choice)
         {
-            DisplayBoard(" ");
-            Console.WriteLine("Choice");
+            if (choice.Key == ConsoleKey.Escape)
+            {
+                QuitGame = true;
+            }
+            GameLogic(choice);
+        }
 
-
+        private void GameLogic(ConsoleKeyInfo userchoice)
+        {
+            if (QuitGame)
+                Console.WriteLine("Thank you for playing!!");
         }
     }
 }
