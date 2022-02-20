@@ -1,15 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace netcore_oop_basics
 {
-    class Game
+    abstract class Game
     {
-        public bool QuitGame { get; set; }
+        protected enum GameState { START, QUIT }
+        private bool quitgame = false;
+        protected GameState currentstate {get;set;}
         public Game()
         {
-            QuitGame = false;
+            currentstate = GameState.START;
+            
+        }
+        public Game(bool displayboard)
+        {
+            currentstate = GameState.START;
             DisplayBoard(" ");
         }
+
         private void DisplayBoard(string gridFiller)
         {
             //Console.Clear();
@@ -21,19 +30,33 @@ namespace netcore_oop_basics
             }
         }
 
-        public void HandleUserInput(ConsoleKeyInfo choice)
+        protected virtual void HandleUserInput(ConsoleKeyInfo choice)
         {
             if (choice.Key == ConsoleKey.Escape)
-            {
-                QuitGame = true;
-            }
+                currentstate = GameState.QUIT;
+
             GameLogic(choice);
         }
 
-        private void GameLogic(ConsoleKeyInfo userchoice)
+        protected virtual void GameLogic(ConsoleKeyInfo userchoice)
         {
-            if (QuitGame)
+            if (currentstate is GameState.QUIT)
+            {
                 Console.WriteLine("Thank you for playing!!");
+                QuitGame = true;
+            }
+        }
+
+
+        public bool QuitGame
+        {
+            get
+            {
+                return quitgame;
+            }
+            set{
+                quitgame = value;
+            }
         }
     }
 }
